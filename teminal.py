@@ -6,7 +6,7 @@ import os
 from decimal import Decimal
 import time
 import json
-from wikipedia.wikipedia import languages
+
 for i in range(5):
     print("Loading... |")
     time.sleep(0.2)
@@ -22,18 +22,18 @@ for i in range(5):
     os.system("cls")
 
 todays_date = date.today()
-
+hist = []
 print("Current date: ", todays_date)
 print("Welcome to Your Life Data Processing Terminal Program That Is Worse Than Your Smartphone And Comes With Absolutely No Warranty!")
 print("Organize your life!")
 print("YLDPTPTIWTYSACWANW is a trademark  of me. ")
 print("Type a command below!(For help, type \"help\" for help)")
 inpt = ""
-with open("plan.json", "r+") as fp:
-    plan = json.load(fp)
+with open("plan.json", "r+") as plan:
+    plan = json.load(plan)
 inno = 0
-with open("notes.json", "r+") as fp:
-    notes = json.load(fp)
+with open("notes.json", "r+") as notes:
+    notes = json.load(notes)
 
 planner = 0
 def ask(n):
@@ -124,12 +124,12 @@ def ask(n):
                 print("There is no "+ pinp +"th of "+ month+ "\n Please try again.")
     if inpt == "note" or inpt == "Note":
         note = 1
+        print("Note")
+        ninp = input("Enter the sub command.")
+        Notenum = input("Please enter the number of the note. (1-16):")
         while note == 1:
             if ninp == "exit":
                 note = 0
-            print("Note")
-            ninp = input("Enter the sub command.")
-            Notenum = input("Please enter the number of the note. (1-16):")
             print("+-----------------------------------------------+")
             for i in range(len(notes["note"+str(Notenum)])):
                 print(notes["note"+str(Notenum)][int(i)])
@@ -145,8 +145,8 @@ def ask(n):
                         notes["note"+str(Notenum)][line-1] = txt
                     if line == 0 or line == -1:
                         edit = 0
-            else:
-                print("You couldn't follow simple instructions. How sad.")
+                    else:
+                        print("You couldn't follow simple instructions. How sad.")
             if ninp == "read":
                 print("Enter the file number (1-16)")
                 Notenum = input("Please enter the number of the note. (1-16):")
@@ -154,6 +154,20 @@ def ask(n):
                 for i in range(len(notes["note"+str(Notenum)])):
                     print(notes["note"+str(Notenum)][int(i)])
                 print("+-----------------------------------------------+")
+    if inpt =="Calculator" or inpt == "Calc" or inpt == "calc" or inpt =="calculator":
+        mode = input("Enter Simple for normal, Sci for scientific.")
+        if mode == "Simple":
+            def printhist():
+                print("+--------------------------------------------------+")
+                print("|History:                                          |")
+                for i in range(len(hist)):
+                    print("|"+str(hist[i]).ljust(30," ")+"|")
+                print("+--------------------------------------------------+")
+            print("All operations will take the form a/b, where a is the first input and b is the second.")
+            op = input("Enter the operation symbol: +-*/:")
+            num1 = int(input("Enter a number:"))
+            num2 = int(input("Enter a number:")) 
+            hist.append(Decimal(num1) + Decimal(num2) )
     if inpt == "Help" or inpt == "help":
         print("There is no help now. How sad.")
 
