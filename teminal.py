@@ -6,19 +6,64 @@ import os
 from decimal import Decimal
 import time
 import json
-
+import random
+from math import acos
+from math import acosh
+from math import asin
+from math import asinh
+from math import atan
+from math import atan2
+from math import atanh
+from math import ceil
+from math import comb
+from math import copysign
+from math import cos
+from math import cosh	
+from math import degrees
+from math import dist	
+from math import exp
+from math import fabs
+from math import factorial
+from math import floor
+from math import fmod
+from math import frexp
+from math import fsum
+from math import gamma
+from math import gcd
+from math import hypot
+from math import isclose
+from math import isfinite
+from math import isinf
+from math import isnan
+from math import isqrt
+from math import ldexp
+from math import lgamma
+from math import log
+from math import log10	
+from math import log2	
+from math import perm	
+from math import pow	
+from math import prod	
+from math import radians
+from math import remainder
+from math import sin	
+from math import sinh	
+from math import sqrt
+from math import tan
+from math import tanh	
+from math import trunc
 for i in range(5):
     print("Loading... |")
-    time.sleep(0.2)
+    time.sleep(0.1)
     os.system("cls")
     print("Loading... /")
-    time.sleep(0.2)
+    time.sleep(0.1)
     os.system("cls")
     print("Loading... -")
-    time.sleep(0.2)
+    time.sleep(0.1)
     os.system("cls")
     print("Loading... \\")
-    time.sleep(0.2)
+    time.sleep(0.1)
     os.system("cls")
 
 todays_date = date.today()
@@ -42,11 +87,11 @@ def ask(n):
     if inpt == "Planner" or inpt == "planner" or inpt == "plan":
         month = input("Enter any month (shorthand, i.e. Jan):")
         max = 0
-        lname = ""
+
         if month == "Jan":
             m = 1
             max = 31
-            lname = "January"
+
         if month == "Feb":
             m = 2
             if calendar.isleap(todays_date.year):
@@ -156,22 +201,104 @@ def ask(n):
                 print("+-----------------------------------------------+")
     if inpt =="Calculator" or inpt == "Calc" or inpt == "calc" or inpt =="calculator":
         mode = input("Enter Simple for normal, Sci for scientific.")
-        if mode == "Simple":
+        while mode == "Simple":
             def printhist():
                 print("+--------------------------------------------------+")
                 print("|History:                                          |")
                 for i in range(len(hist)):
-                    print("|"+str(hist[i]).ljust(30," ")+"|")
+                    print("|"+str(hist[i]).ljust(50," ")+"|")
                 print("+--------------------------------------------------+")
             print("All operations will take the form a/b, where a is the first input and b is the second.")
-            op = input("Enter the operation symbol: +-*/:")
-            num1 = int(input("Enter a number:"))
-            num2 = int(input("Enter a number:")) 
-            hist.append(Decimal(num1) + Decimal(num2) )
+            op = input("Enter the operation symbol: +-*/, or exit to exit:")
+            num1 = input("Enter a number:")
+            num2 = input("Enter a number:") 
+            if op == "+":
+                a = Decimal(int(num1)) + Decimal(int(num2))
+                hist.append(num1 +"+"+ num2)
+                hist.append(a)
+                print(a)
+            if op == "-":
+                a = Decimal(int(num1)) - Decimal(int(num2))
+                hist.append(num1 +"-"+ num2)
+                hist.append(a)
+                print(a)
+            if op == "*":
+                a = Decimal(int(num1)) * Decimal(int(num2))
+                hist.append(num1 +"*"+ num2)
+                hist.append(a)
+                print(a)
+            if op == "/":
+                a = Decimal(int(num1)) / Decimal(int(num2))
+                hist.append(num1 +"/"+ num2)
+                hist.append(a)
+                print(a)
+            if op == "^":
+                a = Decimal(int(num1)) ** Decimal(int(num2))
+                hist.append(num1 +"^"+ num2)
+                hist.append(a)
+                print(a)
+            printhist()
+            if op == "exit":
+                mode = ""
+        while mode == "Sci":
+            def printhist():
+                print("+--------------------------------------------------+")
+                print("|History:                                          |")
+                for i in range(len(hist)):
+                    print("|"+str(hist[i]).ljust(50," ")+"|")
+                print("+--------------------------------------------------+")
+            expression = input("Enter the expression:")
+            if expression == "exit":
+                mode = ""
+                break
+            else:
+                out = eval(expression)
+                print(out)
+                hist.append(expression)
+                hist.append(str(out))
+                printhist()
+    if inpt == "Games":
+        print("Games: Guess the number, null")
+        print("For guess the number, enter GTN., for null, enter null")
+    if inpt == "GTN":
+        gtn = 1
+        while(gtn == 1):
+            maxnum = int(input("What do you want the largest number to be?"))
+            correctans = random.randint(1, maxnum)
+            maxtry = int(input("Enter 1, 2 or 3 for 10, 20 ,30 tries respectively:"))
+            if maxtry > 3:
+                print("input is not valid, try again")
+                maxtry = int(input("Enter 1, 2 or 3 for 10, 20 ,30 tries respectively:"))
+            else:
+                maxtry = maxtry * 10
+            print("Generated random number.")
+            b = 0
+            print(b)
+            print(correctans)
+            while(b < maxtry):
+                b += 1
+                guess = int(input("Enter your guess(-1 to exit):"))
+                if guess == -1:
+                    gtn = 0
+                    break
+                if guess == correctans:
+                    print("You did it! It only took you "+ str(b) +" steps.")
+                    break
+                elif guess > correctans and guess - correctans > 100:
+                    print("You went too high, try going lower.")
+                elif guess > correctans and guess - correctans <= 100:
+                    print("You are close, try going lower.")
+                elif guess < correctans and correctans - guess > 100:
+                    print("You went too low, try going higher.")
+                elif guess < correctans and correctans - guess <= 100:
+                    print("You are close, try going higher.")
+                
     if inpt == "Help" or inpt == "help":
         print("There is no help now. How sad.")
 
     if inpt == "exit" or inpt == "Exit" or inpt == "end":
+        plan.close()
+        notes.close()
         exit()
             
 for i in range(8192):
