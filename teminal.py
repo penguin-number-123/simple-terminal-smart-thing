@@ -7,51 +7,8 @@ from decimal import Decimal
 import time
 import json
 import random
-from math import acos
-from math import acosh
-from math import asin
-from math import asinh
-from math import atan
-from math import atan2
-from math import atanh
-from math import ceil
-from math import comb
-from math import copysign
-from math import cos
-from math import cosh	
-from math import degrees
-from math import dist	
-from math import exp
-from math import fabs
-from math import factorial
-from math import floor
-from math import fmod
-from math import frexp
-from math import fsum
-from math import gamma
-from math import gcd
-from math import hypot
-from math import isclose
-from math import isfinite
-from math import isinf
-from math import isnan
-from math import isqrt
-from math import ldexp
-from math import lgamma
-from math import log
-from math import log10	
-from math import log2	
-from math import perm	
-from math import pow	
-from math import prod	
-from math import radians
-from math import remainder
-from math import sin	
-from math import sinh	
-from math import sqrt
-from math import tan
-from math import tanh	
-from math import trunc
+import hashlib
+from math import *
 for i in range(5):
     print("Loading... |")
     time.sleep(0.1)
@@ -68,22 +25,22 @@ for i in range(5):
 
 todays_date = date.today()
 hist = []
+with open("plan.json", "r+") as planfile:
+    plan = json.load(planfile)
+with open("notes.json", "r+") as notesfile:
+    notes = json.load(notesfile)
+
 print("Current date: ", todays_date)
 print("Welcome to Your Life Data Processing Terminal Program That Is Worse Than Your Smartphone And Comes With Absolutely No Warranty!")
 print("Organize your life!")
 print("YLDPTPTIWTYSACWANW is a trademark  of me. ")
-print("Type a command below!(For help, type \"help\" for help)")
+print("Enter Credidentialsdjoifidfjdjf:")
+
 inpt = ""
-with open("plan.json", "r+") as plan:
-    plan = json.load(plan)
-inno = 0
-with open("notes.json", "r+") as notes:
-    notes = json.load(notes)
 
 planner = 0
 def ask(n):
-    inno = n
-    inpt = input("In[" + str(inno) + "]:")
+    inpt = input("In[" + str(n) + "]:")
     if inpt == "Planner" or inpt == "planner" or inpt == "plan":
         month = input("Enter any month (shorthand, i.e. Jan):")
         max = 0
@@ -297,10 +254,21 @@ def ask(n):
         print("There is no help now. How sad.")
 
     if inpt == "exit" or inpt == "Exit" or inpt == "end":
-        plan.close()
-        notes.close()
+        planfile.close()
+        notesfile.close()
         exit()
-            
-for i in range(8192):
-    ask(i)
-
+with open("usernamePassword.json", "r+") as userpassfile:
+    userpassdict = json.load(userpassfile)
+d = 0
+while(d < 3):
+    username = input("Enter username:")
+    password = hashlib.sha512(input("Enter password:").encode('utf-8')).hexdigest()
+    if username in userpassdict and password == userpassdict[username]:
+        print(f"Welcome, {username}. You are now successfully logged in.")
+        for i in range(8192):
+            ask(i)
+    else:
+        d += 1
+        print("Username or password incorrect. Please try again.")
+if d==3:
+    print("Sorry, max tries exceeded.")
