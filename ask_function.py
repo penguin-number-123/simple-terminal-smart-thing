@@ -4,7 +4,7 @@ from decimal import Decimal
 import json
 import random
 import hashlib
-import re
+
 todays_date = date.today()
 hist = []
 
@@ -16,8 +16,6 @@ def ask(n,user,isadmin=False):
     with open(notedir, "r+") as notesfile:
         notes = json.load(notesfile)
     inpt = input("In[" + str(n) + "]:")
-    if isadmin:
-        print("Welcome, admin. For admin tools please type \"admin tools\"")
     if inpt == "Planner" or inpt == "planner" or inpt == "plan":
         month = input("Enter any month (shorthand, i.e. Jan):")
         max = 0
@@ -91,6 +89,10 @@ def ask(n,user,isadmin=False):
                     day = int(input("Enter day to edit(1-31):"))
                     text = input("Enter the plan (Use | to add a line break):")
                     if day <=0:
+                        with open(plandir, "w") as planfile:
+                            planfile.seek(0)
+                            json.dump(plan, planfile)
+                            planfile.truncate()
                         edit = False
                     if day >= 0 and day <= max:
                         plan[str(month)][day-1] = text.replace('|', '\n')
@@ -124,7 +126,9 @@ def ask(n,user,isadmin=False):
                         notes["note"+str(Notenum)][line-1] = txt
                     if line == 0 or line == -1:
                         with open(notedir, "w") as notefile:
+                            notefile.seek(0)
                             json.dump(notes, notefile)
+                            notefile.truncate()
                         edit = False
                     else:
                         print("You couldn't follow simple instructions. How sad.")
@@ -192,11 +196,15 @@ def ask(n,user,isadmin=False):
                 mode = ""
                 break
             else:
-                out = eval(expression)
-                print(out)
-                hist.append(expression)
-                hist.append(str(out))
-                printhist()
+                try:
+                    out = eval(expression)
+                except ZeroDivisionError:
+                    print("You cannot divide by zero.")
+                else:
+                    print(out)
+                    hist.append(expression)
+                    hist.append(str(out))
+                    printhist()
     if inpt == "Games":
         print("Games: Guess the number, null")
         print("For guess the number, enter GTN., for null, enter null")
@@ -256,9 +264,24 @@ def ask(n,user,isadmin=False):
                 print("More comming soon.")
             if adminpt == "add user":
                 new_username = input("Enter username for user:")
-                new_password = hashlib.sha512(input("Enter password for user:").encode('utd-8')).hexdigest()
+                new_password = hashlib.sha512(input("Enter password for user:").encode('utf-8')).hexdigest()
                 if "\"" in new_username or "\'" in new_username or "\"" in new_password or "\'" in new_password:
                     print("Illegal characters (\" \') in username or password.")
+                with open("notes_template.json","r+") as notetemplatefile:
+                    notetemp = json.load(notetemplatefile)
+                with open("plan_template.json", "r+") as plantemplatefile:
+                    plantemp = json.load(plantemplatefile)
+                with open("usernamePassword.json", "r+") as curr_userpass_file:
+                    curr_userpass = json.load(curr_userpass_file)
+                    curr_userpass[new_username] = new_password
+                    curr_userpass_file.seek(0)
+                    json.dump(curr_userpass, curr_userpass_file)
+                    curr_userpass_file.truncate()
+                with open("notes_"+new_username+".json", "w") as new_notes_file:
+                    json.dump(notetemp, new_notes_file)
+                with open("plan_"+new_username+".json", "w") as new_plan_file:
+                    json.dump(plantemp, new_plan_file)
+
             if adminpt == "exit" or adminpt == "Exit":
                 admin = False
 if __name__ == '__main__':

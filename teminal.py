@@ -8,7 +8,7 @@ import json
 import random
 import hashlib
 from math import *
-from ask import ask
+from ask_function import ask
 for i in range(5):
     print("Loading... |")
     time.sleep(0.1)
@@ -37,9 +37,10 @@ d = 0
 while(d < 3):
     username = input("Enter username:")
     password = hashlib.sha512(input("Enter password:").encode('utf-8')).hexdigest()
-    with open("plan_"+ username +".json", "r+") as planfile:
-        plan = json.load(planfile)
+
     if username in userpassdict and password == userpassdict[username]:
+        with open("plan_"+ username +".json", "r+") as planfile:
+            plan = json.load(planfile)
         print(f"Welcome, {username}. You are now successfully logged in.")
         print("Current date: ", todays_date)
         print("Events today:")
